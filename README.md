@@ -1,4 +1,4 @@
-# Desafio do Caixa eletrônico
+# Desafio do Caixa Eletrônico
 
 Resolução de exercício do processo seletivo para desenvolvedores de doftware da empresa Zenvia.
 
@@ -27,7 +27,7 @@ Sendo assim, quando uma requisição de saque é feita para a máquina, ela é v
 
 Após a máquina (CashMachine) processar uma requisição de saque válida, ela retorna as cédulas separadas em maços de dinheiro (WadOfCash), agrupados pelo valor da nota e quantidade. 
 
-Visando aumentar a dificuldade da solução, foi permitido estabelecer limites de quantidade de notas para cada valor. Essa parametrização pode ser realizada no aquivo de propriedades do projeto, informado adiante.
+Visando aumentar a dificuldade da solução, foi permitido estabelecer limites de quantidade de notas para cada valor. Essa parametrização pode ser realizada no aquivo de propriedades do projeto informado adiante.
  
 ## Tecnologias utilizadas
 - Java 11
@@ -40,11 +40,11 @@ Visando aumentar a dificuldade da solução, foi permitido estabelecer limites d
 - Docker instalado na máquina onde vai rodar aplicação. (https://www.docker.com/)
 - Nenhuma aplicação estar rodando na porta 8080 ou realizar a seguinte alteraração no arquivo deploy.sh em /zenvia-atm-challenge:  
 
-mudar de:
+	mudar de:
 ```
 docker run -p 8080:8080 -d zenvia/atm 
 ```
-para:
+	para:
 ```
 docker run -p {porta-desejada}:8080 -d zenvia/atm 
 ```
