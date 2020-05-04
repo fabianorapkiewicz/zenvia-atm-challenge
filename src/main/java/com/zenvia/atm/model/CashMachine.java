@@ -20,13 +20,13 @@ public class CashMachine {
 		
 	}
 	
-	public List<Cash> dispense(CashAmount amount) throws CashMachineException {
+	public List<WadOfCash> withdraw(CashAmount amount) throws CashMachineException {
 		validator.validate(amount);
 		
-		WadCash cashCollector = new WadCash();
+		CashMachineCollector cashCollector = new CashMachineCollector();
 		
 		cashHandler.dispense(amount, cashCollector);
 		
-		return cashCollector.getCash();
+		return cashCollector.getWadOfCash();
 	}
 }

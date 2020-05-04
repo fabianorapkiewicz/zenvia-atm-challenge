@@ -7,18 +7,18 @@ import java.util.stream.Collectors;
 
 import com.zenvia.atm.model.handler.CashCollector;
 
-public class WadCash implements CashCollector{
+public class CashMachineCollector implements CashCollector{
 	private Map<Integer, Integer> cash;
 
-	public WadCash() {
+	public CashMachineCollector() {
 		cash = new HashMap<Integer, Integer>();
 	}
 	
-	public List<Cash> getCash() {
+	public List<WadOfCash> getWadOfCash() {
 		return cash.entrySet()
 				.stream()
 				.sorted(Map.Entry.comparingByKey())
-				.map( item -> new Cash(item.getKey(), item.getValue()))
+				.map( item -> new WadOfCash(item.getKey(), item.getValue()))
 				.collect(Collectors.toList());
 		}
 

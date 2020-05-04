@@ -18,9 +18,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 import com.zenvia.atm.exception.CashMachineException;
-import com.zenvia.atm.model.Cash;
+import com.zenvia.atm.model.WadOfCash;
 import com.zenvia.atm.model.CashAmount;
-import com.zenvia.atm.model.WadCash;
+import com.zenvia.atm.model.CashMachineCollector;
 
 class FiftyNoteHandlerTest {
 
@@ -34,12 +34,12 @@ private CashHandler nextHandler;
 	@ParameterizedTest
 	@MethodSource("provideAlotOfValidMultiplesOfFifty")
 	public void givenInfinitiveNotesWhenCashAmountIsValidThenGetCash(
-			CashAmount amount, List<Cash> expected) throws CashMachineException {
+			CashAmount amount, List<WadOfCash> expected) throws CashMachineException {
 		
-		WadCash collector = new WadCash();
+		CashMachineCollector collector = new CashMachineCollector();
 		getInfinitiveHandler().dispense(amount, collector);
 		
-		assertEquals(expected, collector.getCash());
+		assertEquals(expected, collector.getWadOfCash());
 		
 		verify(nextHandler, never()).dispense(any(), any());
 	}
@@ -48,12 +48,12 @@ private CashHandler nextHandler;
 	public void givenFinitiveNotesWhenCashAmounIsGreaterThanLimitThenCallNext()
 			throws CashMachineException {
 		
-		List<Cash> expected = List.of(new Cash(50, 2));
+		List<WadOfCash> expected = List.of(new WadOfCash(50, 2));
 		
-		WadCash collector = new WadCash();
+		CashMachineCollector collector = new CashMachineCollector();
 		getFinitiveHandler(2).dispense(CashAmount.from(180), collector);
 		
-		assertEquals(expected, collector.getCash());
+		assertEquals(expected, collector.getWadOfCash());
 		
 		verify(nextHandler, times(1)).dispense(CashAmount.from(80), collector);
 	}
@@ -61,12 +61,12 @@ private CashHandler nextHandler;
 	@ParameterizedTest
 	@MethodSource("provideDataToDifferentNotes")
 	public void whentCashAmountNeedsDifferentNotesThenNextHandlerIsCalled(
-			CashAmount amount, List<Cash> expected, Integer difference) throws CashMachineException {
+			CashAmount amount, List<WadOfCash> expected, Integer difference) throws CashMachineException {
 		
-		WadCash collector = new WadCash();
+		CashMachineCollector collector = new CashMachineCollector();
 		getInfinitiveHandler().dispense(amount, collector);
 		
-		assertEquals(expected, collector.getCash());
+		assertEquals(expected, collector.getWadOfCash());
 		
 		if(difference > 0)
 			verify(nextHandler, times(1)).dispense(CashAmount.from(difference), collector);
@@ -90,11 +90,11 @@ private CashHandler nextHandler;
 
 	private static Stream<Arguments> provideAlotOfValidMultiplesOfFifty() {
 	    return Stream.of(
-	      Arguments.of(CashAmount.from(50), List.of(new Cash(50, 1))),
-	      Arguments.of(CashAmount.from(500), List.of(new Cash(50, 10))),
-	      Arguments.of(CashAmount.from(5000), List.of(new Cash(50, 100))),
-	      Arguments.of(CashAmount.from(3700), List.of(new Cash(50, 74))),
-	      Arguments.of(CashAmount.from(47200), List.of(new Cash(50, 944)))
+	      Arguments.of(CashAmount.from(50), List.of(new WadOfCash(50, 1))),
+	      Arguments.of(CashAmount.from(500), List.of(new WadOfCash(50, 10))),
+	      Arguments.of(CashAmount.from(5000), List.of(new WadOfCash(50, 100))),
+	      Arguments.of(CashAmount.from(3700), List.of(new WadOfCash(50, 74))),
+	      Arguments.of(CashAmount.from(47200), List.of(new WadOfCash(50, 944)))
 	    );
 	}
 	
@@ -102,8 +102,8 @@ private CashHandler nextHandler;
 	    return Stream.of(
 	      Arguments.of(CashAmount.from(10), List.of(), 10),
 	      Arguments.of(CashAmount.from(40), List.of(), 40),
-	      Arguments.of(CashAmount.from(130), List.of(new Cash(50, 2)), 30),
-	      Arguments.of(CashAmount.from(300), List.of(new Cash(50, 6)), 0)
+	      Arguments.of(CashAmount.from(130), List.of(new WadOfCash(50, 2)), 30),
+	      Arguments.of(CashAmount.from(300), List.of(new WadOfCash(50, 6)), 0)
 	    );
 	}
 

@@ -18,9 +18,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 import com.zenvia.atm.exception.CashMachineException;
-import com.zenvia.atm.model.Cash;
+import com.zenvia.atm.model.WadOfCash;
 import com.zenvia.atm.model.CashAmount;
-import com.zenvia.atm.model.WadCash;
+import com.zenvia.atm.model.CashMachineCollector;
 
 class TenNoteHandlerTest {
 
@@ -34,12 +34,12 @@ private CashHandler nextHandler;
 	@ParameterizedTest
 	@MethodSource("provideAlotOfValidMultiplesOfTen")
 	public void givenInfinitiveNotesWhenCashAmountIsValidThenGetCash(
-			CashAmount amount, List<Cash> expected) throws CashMachineException {
+			CashAmount amount, List<WadOfCash> expected) throws CashMachineException {
 		
-		WadCash collector = new WadCash();
+		CashMachineCollector collector = new CashMachineCollector();
 		getInfinitiveHandler().dispense(amount, collector);
 		
-		assertEquals(expected, collector.getCash());
+		assertEquals(expected, collector.getWadOfCash());
 		
 		verify(nextHandler, never()).dispense(any(), any());
 	}
@@ -48,12 +48,12 @@ private CashHandler nextHandler;
 	public void givenFinitiveNotesWhenCashAmounIsGreaterThanLimitThenCallNext()
 			throws CashMachineException {
 		
-		List<Cash> expected = List.of(new Cash(10, 7));
+		List<WadOfCash> expected = List.of(new WadOfCash(10, 7));
 		
-		WadCash collector = new WadCash();
+		CashMachineCollector collector = new CashMachineCollector();
 		getFinitiveHandler(7).dispense(CashAmount.from(90), collector);
 		
-		assertEquals(expected, collector.getCash());
+		assertEquals(expected, collector.getWadOfCash());
 		
 		verify(nextHandler, times(1)).dispense(CashAmount.from(20), collector);
 	}
@@ -74,11 +74,11 @@ private CashHandler nextHandler;
 
 	private static Stream<Arguments> provideAlotOfValidMultiplesOfTen() {
 	    return Stream.of(
-	      Arguments.of(CashAmount.from(10), List.of(new Cash(10, 1))),
-	      Arguments.of(CashAmount.from(500), List.of(new Cash(10, 50))),
-	      Arguments.of(CashAmount.from(1000), List.of(new Cash(10, 100))),
-	      Arguments.of(CashAmount.from(3700), List.of(new Cash(10, 370))),
-	      Arguments.of(CashAmount.from(47200), List.of(new Cash(10, 4720)))
+	      Arguments.of(CashAmount.from(10), List.of(new WadOfCash(10, 1))),
+	      Arguments.of(CashAmount.from(500), List.of(new WadOfCash(10, 50))),
+	      Arguments.of(CashAmount.from(1000), List.of(new WadOfCash(10, 100))),
+	      Arguments.of(CashAmount.from(3700), List.of(new WadOfCash(10, 370))),
+	      Arguments.of(CashAmount.from(47200), List.of(new WadOfCash(10, 4720)))
 	    );
 	}
 

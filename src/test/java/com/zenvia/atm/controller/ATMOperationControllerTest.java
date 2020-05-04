@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.zenvia.atm.model.Cash;
+import com.zenvia.atm.model.WadOfCash;
 import com.zenvia.atm.model.CashAmount;
 import com.zenvia.atm.model.CashMachine;
 
@@ -55,7 +55,7 @@ class ATMOperationControllerTest {
 			
 		get("/terminal/operacoes/saque/{amount}", amountParam);
 		
-		verify(cashMachine, times(1)).dispense(CashAmount.from(amountParam));
+		verify(cashMachine, times(1)).withdraw(CashAmount.from(amountParam));
 	}
 	
 	@ParameterizedTest(name = "Verificando serialização da saída")
@@ -68,8 +68,8 @@ class ATMOperationControllerTest {
 		Integer valueCash = arguments.getInteger(2);
 		Integer amountCash = arguments.getInteger(3);
 		
-		when(cashMachine.dispense(CashAmount.from(amountParam)))
-		.thenReturn(List.of(new Cash(valueCash, amountCash)));
+		when(cashMachine.withdraw(CashAmount.from(amountParam)))
+		.thenReturn(List.of(new WadOfCash(valueCash, amountCash)));
 		
 		 get("/terminal/operacoes/saque/{amount}", amountParam)
 		 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())

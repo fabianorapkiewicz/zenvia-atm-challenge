@@ -40,11 +40,11 @@ class CashMachineTest {
 	@ParameterizedTest
 	@MethodSource("provideInputAndOutputValidToDispense")
 	public void whenCashAmountIsValidThenCashMachineReturnsCashList(
-			CashAmount amount, List<Cash> expected) throws CashMachineException {
+			CashAmount amount, List<WadOfCash> expected) throws CashMachineException {
 		
 		whenCashHandlerDispenseIsCalledThenDelivery(expected);
 		
-		Assertions.assertEquals(expected, cashMachine.dispense(amount));
+		Assertions.assertEquals(expected, cashMachine.withdraw(amount));
 
 		verify(validator, times(1)).validate(amount);
 		verify(cashHandler, times(1)).dispense(any(CashAmount.class), any(CashCollector.class));
@@ -59,33 +59,33 @@ class CashMachineTest {
 		.when(validator).validate(CashAmount.from(amount));
 		
 		Assertions.assertThrows(CashMachineValidateException.class, 
-				() -> cashMachine.dispense(CashAmount.from(amount)));
+				() -> cashMachine.withdraw(CashAmount.from(amount)));
 		
 		verify(validator, times(1)).validate(CashAmount.from(amount));
 		
 	}
 	
-	private void whenCashHandlerDispenseIsCalledThenDelivery(List<Cash> expected) throws CashMachineException {
+	private void whenCashHandlerDispenseIsCalledThenDelivery(List<WadOfCash> expected) throws CashMachineException {
 		doAnswer((Answer<Void>) invocation -> {
 			CashCollector cashController = invocation.getArgument(1);
 			
-			for(Cash cash : expected)
+			for(WadOfCash cash : expected)
 				for(int i = 0; i < cash.getAmount(); i++)
 					cashController.addCash(CashAmount.from(cash.getValue()));
 			
 			return null;
-		}).when(cashHandler).dispense(any(CashAmount.class), any(WadCash.class));
+		}).when(cashHandler).dispense(any(CashAmount.class), any(CashMachineCollector.class));
 	}
 	
 	private static Stream<Arguments> provideInputAndOutputValidToDispense() {
 	    return Stream.of(
-	      Arguments.of(CashAmount.from(10), List.of(new Cash(10, 1))),
-	      Arguments.of(CashAmount.from(20), List.of(new Cash(20, 1))),
-	      Arguments.of(CashAmount.from(50), List.of(new Cash(50, 1))),
-	      Arguments.of(CashAmount.from(100), List.of(new Cash(100, 1))),
-	      Arguments.of(CashAmount.from(30), List.of(new Cash(10, 1), new Cash(20, 1))),
-	      Arguments.of(CashAmount.from(80), List.of(new Cash(10, 1), new Cash(20, 1), new Cash(50, 1))),
-	      Arguments.of(CashAmount.from(500), List.of(new Cash(100, 5)))
+	      Arguments.of(CashAmount.from(10), List.of(new WadOfCash(10, 1))),
+	      Arguments.of(CashAmount.from(20), List.of(new WadOfCash(20, 1))),
+	      Arguments.of(CashAmount.from(50), List.of(new WadOfCash(50, 1))),
+	      Arguments.of(CashAmount.from(100), List.of(new WadOfCash(100, 1))),
+	      Arguments.of(CashAmount.from(30), List.of(new WadOfCash(10, 1), new WadOfCash(20, 1))),
+	      Arguments.of(CashAmount.from(80), List.of(new WadOfCash(10, 1), new WadOfCash(20, 1), new WadOfCash(50, 1))),
+	      Arguments.of(CashAmount.from(500), List.of(new WadOfCash(100, 5)))
 	    );
 	}
 

@@ -1,11 +1,11 @@
 package com.zenvia.atm.model;
 
-public class Cash {
+public class WadOfCash {
 	
 	private Integer value;
 	private Integer amount;
 	
-	public Cash(Integer value, Integer amount) {
+	public WadOfCash(Integer value, Integer amount) {
 		this.value = value;
 		this.amount = amount;		
 	}
@@ -43,7 +43,7 @@ public class Cash {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cash other = (Cash) obj;
+		WadOfCash other = (WadOfCash) obj;
 		if (amount == null) {
 			if (other.amount != null)
 				return false;

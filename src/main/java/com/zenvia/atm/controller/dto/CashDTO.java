@@ -1,15 +1,15 @@
 package com.zenvia.atm.controller.dto;
 
-public class BanknoteDTO {
+public class CashDTO {
 	
 	private Integer value;
 	private Integer amount;
 	
-	public BanknoteDTO() {
+	public CashDTO() {
 		
 	}
 	
-	public BanknoteDTO(Integer value, Integer amount) {
+	public CashDTO(Integer value, Integer amount) {
 		this.value = value;
 		this.amount = amount;
 	}
