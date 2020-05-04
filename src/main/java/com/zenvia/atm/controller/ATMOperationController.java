@@ -17,7 +17,7 @@ import com.zenvia.atm.model.CashAmount;
 import com.zenvia.atm.model.CashMachine;
 
 @RestController
-@RequestMapping(value = "/atm/operacoes/", produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "/terminal/operacoes/", produces = "application/json;charset=UTF-8")
 public class ATMOperationController {
 
 	private CashMachine cashMachine;

@@ -36,14 +36,14 @@ class ATMOperationControllerTest {
 	@ParameterizedTest(name = "Verificando a correspondência de solicitaão HTTP")
 	@ValueSource(strings = {"2", "83", "393"})
 	public void whenAmountIsIntegerPositive_thenReturns2xx(String amountParam) throws Exception {		
-		 get("/atm/operacoes/saque/{amount}", amountParam)
+		 get("/terminal/operacoes/saque/{amount}", amountParam)
 		 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 	}
 	
 	@ParameterizedTest(name = "Verificando a validação de entrada")
 	@ValueSource(strings = {"letras", "9.89", "-12"})
 	public void whenAmountIsNotInteger_thenReturns4xx(String amountParam) throws Exception {
-		 get("/atm/operacoes/saque/{amount}", amountParam)
+		 get("/terminal/operacoes/saque/{amount}", amountParam)
 		 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
 		 .andExpect(MockMvcResultMatchers.content().string("Valor informado para saque é inválido"));
 	}
@@ -53,7 +53,7 @@ class ATMOperationControllerTest {
 	public void whenAmountIsIntegerMulitpleOfTen_thenIntegerToWithdraw(
 			String amountParam) throws Exception {
 			
-		get("/atm/operacoes/saque/{amount}", amountParam);
+		get("/terminal/operacoes/saque/{amount}", amountParam);
 		
 		verify(cashMachine, times(1)).dispense(CashAmount.from(amountParam));
 	}
@@ -71,7 +71,7 @@ class ATMOperationControllerTest {
 		when(cashMachine.dispense(CashAmount.from(amountParam)))
 		.thenReturn(List.of(new Cash(valueCash, amountCash)));
 		
-		 get("/atm/operacoes/saque/{amount}", amountParam)
+		 get("/terminal/operacoes/saque/{amount}", amountParam)
 		 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
 		 .andExpect(MockMvcResultMatchers.content().json(jsonExpected));
 	}
