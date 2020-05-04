@@ -40,11 +40,13 @@ Visando aumentar a dificuldade da solução, foi permitido estabelecer limites d
 - Docker instalado na máquina onde vai rodar aplicação. (https://www.docker.com/)
 - Nenhuma aplicação estar rodando na porta 8080 ou realizar a seguinte alteraração no arquivo deploy.sh em /zenvia-atm-challenge:  
 
-	mudar de:
+> mudar de:
+
 ```
 docker run -p 8080:8080 -d zenvia/atm 
 ```
-	para:
+> para:
+
 ```
 docker run -p {porta-desejada}:8080 -d zenvia/atm 
 ```
