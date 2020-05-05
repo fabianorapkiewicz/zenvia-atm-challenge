@@ -2,7 +2,7 @@
 
 Resolução de exercício do processo seletivo para desenvolvedores de doftware da empresa Zenvia.
 
-## PROLEMA PROPOSTO
+## PROBLEMA PROPOSTO
 Desenvolva um programa que simule a entrega de notas quando um cliente efetuar um saque em um caixa eletrônico. Os requisitos básicos são os seguintes:
 
  - Entregar o menor número de notas;
